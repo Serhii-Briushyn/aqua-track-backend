@@ -1,0 +1,52 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: AquaTrack API
+  description: Comprehensive API documentation for managing resources, including user authentication, contact management, and other related operations.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: Auth
+    description: Authentication and token management endpoints.
+servers:
+  - url: http://127.0.0.1:3000
+paths:
+  /users/register:
+    post:
+      $ref: ../swagger/paths/users/register/post.yaml
+  /users/login:
+    post:
+      $ref: ../swagger/paths/users/login/post.yaml
+  /users/refresh:
+    post:
+      $ref: ../swagger/paths/users/refresh/post.yaml
+  /users/logout:
+    post:
+      $ref: ../swagger/paths/users/logout/post.yaml
+  /users/update-user:
+    put:
+      $ref: ../swagger/paths/users/update-user/put.yaml
+  /users/update-password:
+    put:
+      $ref: ../swagger/paths/users/update-password/put.yaml
+  /users/count:
+    get:
+      $ref: ../swagger/paths/users/count/get.yaml
+  /users/forgot-password:
+    post:
+      $ref: ../swagger/paths/users/forgot-password/post.yaml
+  /users/reset-password:
+    post:
+      $ref: ../swagger/paths/users/reset-password/post.yaml
+  /users/get-oauth-url:
+    get:
+      $ref: ../swagger/paths/users/get-oauth-url/get.yaml
+  /users/confirm-oauth:
+    post:
+      $ref: ../swagger/paths/users/confirm-oauth/post.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

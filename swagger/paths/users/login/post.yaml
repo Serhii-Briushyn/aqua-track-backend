@@ -1,0 +1,67 @@
+tags:
+  - Auth
+summary: User login
+operationId: loginUser
+description: Logs in a user with valid credentials.
+security: []
+requestBody:
+  description: User credentials for login.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            type: string
+            format: email
+            description: User's email address.
+            example: "johndoe@example.com"
+          password:
+            type: string
+            format: password
+            description: User's password.
+            example: "SecurePass123!"
+responses:
+  "200":
+    description: Successfully logged in user. Access token is returned in the response body, and refresh token and session ID are set as HttpOnly cookies.
+    headers:
+      Set-Cookie:
+        description: HttpOnly cookies containing `refreshToken` and `sessionId`, which are used for session management. These cookies are securely stored and not accessible via JavaScript.
+        schema:
+          type: string
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: "Successfully logged in an user!"
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  description: Access token for accessing protected resources.
+                  example: "pJK+TbhNzRIz1BVL9rf4JXrvuYM4ecbdaoRf+22v"
+                user:
+                  $ref: ../../../components/schemas/user.yaml
+  "400":
+    $ref: ../../../components/responses/400.yaml
+  "401":
+    $ref: ../../../components/responses/401.yaml
+  "404":
+    $ref: ../../../components/responses/404.yaml
+  "500":
+    $ref: ../../../components/responses/500.yaml

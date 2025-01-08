@@ -1,0 +1,36 @@
+description: Unauthorized access due to invalid or expired token, missing Authorization header, or session-related issues.
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          description: HTTP error status.
+          example: 401
+        message:
+          type: string
+          description: General error name.
+          example: "UnauthorizedError"
+        data:
+          type: object
+          description: Details about the error.
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              description: Detailed error explanation.
+              oneOf:
+                - example: "Access token expired"
+                - example: "Please provide Authorization header"
+                - example: "Auth header should be of type Bearer"
+                - example: "Session not found"
+                - example: "User not found"
+                - example: "Unauthorized"
+                - example: "Session token expired"
+                - example: "Token is invalid or expired"

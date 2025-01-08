@@ -1,0 +1,31 @@
+description: Bad request due to invalid request body, incorrect contact ID format, or missing required session ID.
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          description: HTTP error status.
+          example: 400
+        message:
+          type: string
+          description: General error name.
+          example: "BadRequestError"
+        data:
+          type: object
+          description: Details about the error.
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              description: Detailed error explanation.
+              oneOf:
+                - example: "Invalid request body"
+                - example: "Invalid contact ID format"
+                - example: "Session ID is required"

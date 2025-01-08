@@ -1,0 +1,28 @@
+description:  Conflict due to a resource already existing or conflicting with current state.
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          description: HTTP error status.
+          example: 409
+        message:
+          type: string
+          description: General error name.
+          example: "ConflictError"
+        data:
+          type: object
+          description: Details about the error.
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              description: Detailed error explanation.
+              example: "Email in use"

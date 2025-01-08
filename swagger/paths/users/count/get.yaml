@@ -1,0 +1,30 @@
+tags:
+  - Auth
+summary: Get total user count
+operationId: GetUserCount
+description: Retrieve the total number of users registered in the application.
+security: []
+responses:
+  "200":
+    description: User count retrieved successfully.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Users count retrieved successfully.
+            data:
+              type: object
+              properties:
+                userCount:
+                  type: integer
+                  example: 12345
+  "400":
+    $ref: ../../../components/responses/400.yaml
+  "500":
+    $ref: ../../../components/responses/500.yaml

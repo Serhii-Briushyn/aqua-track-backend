@@ -1,0 +1,64 @@
+tags:
+  - Auth
+summary: Update user details
+operationId: UpdateUserDetails
+description: Update details of the currently authenticated user, including their avatar.
+security:
+  - bearerAuth: []
+requestBody:
+  required: false
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          avatar:
+            type: string
+            format: binary
+            description: Avatar image file.
+          name:
+            type: string
+            description: User's name.
+            minLength: 2
+            maxLength: 30
+          email:
+            type: string
+            format: email
+            description: User's email address.
+          gender:
+            type: string
+            enum: ["male", "female"]
+            description: User's gender.
+          weight:
+            type: number
+            description: User's weight in kg.
+          activeHours:
+            type: number
+            description: Number of active hours per day.
+          waterNorm:
+            type: number
+            description: Daily water consumption norm in liters.
+responses:
+  "200":
+    description: User details updated successfully.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: User updated successfully.
+            data:
+              $ref: ../../../components/schemas/user.yaml
+  "400":
+    $ref: ../../../components/responses/400.yaml
+  "401":
+    $ref: ../../../components/responses/401.yaml
+  "404":
+    $ref: ../../../components/responses/404.yaml
+  "500":
+    $ref: ../../../components/responses/500.yaml

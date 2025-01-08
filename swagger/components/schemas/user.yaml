@@ -1,0 +1,50 @@
+type: object
+properties:
+  _id:
+    type: string
+    description: User's unique ID.
+    example: "674c7ea11a75750f5f9b86d4"
+  name:
+    type: string
+    description: User's full name.
+    example: "John Doe"
+    default: "User"
+  email:
+    type: string
+    description: User's email address.
+    example: "johndoe@example.com"
+  gender:
+    type: string
+    description: User's gender.
+    enum: [male, female]
+    example: "male"
+    default: female
+  weight:
+    type: number
+    description: User's weight in kilograms.
+    example: 0
+    default: 0
+  activeHours:
+    type: number
+    description: User's daily active hours.
+    example: 0
+    default: 0
+  waterNorm:
+    type: number
+    description: User's daily water consumption norm in milliliters.
+    example: 0
+    default: 0
+  avatar:
+    type: string
+    description: URL of the user's avatar.
+    example: "https://res.cloudinary.com/uqwgdu/image/upload/avatar.png"
+  createdAt:
+    type: string
+    format: date-time
+    description: Timestamp when the user was created (ISO 8601).
+    example: "2024-12-01T12:34:56Z"
+  updatedAt:
+    type: string
+    format: date-time
+    description: Timestamp when the user was last updated (ISO 8601).
+    example: "2024-12-02T08:15:30Z"
