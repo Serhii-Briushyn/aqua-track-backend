@@ -62,6 +62,14 @@
         "responses": {
           "201": {
             "description": "Successfully user registration.",
+            "headers": {
+              "Set-Cookie": {
+                "example": "refreshToken=Uy%2BDTZ6%2FlEmOk7wETF4TiNTqC8nEJq6pvxq%2B9DiB, sessionId=j%3A%22677e1c08e9b66d3fe13f769a%22",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -150,10 +158,10 @@
         },
         "responses": {
           "200": {
-            "description": "Successfully logged in user. Access token is returned in the response body, and refresh token and session ID are set as HttpOnly cookies.",
+            "description": "Successfully logged in user.",
             "headers": {
               "Set-Cookie": {
-                "description": "HttpOnly cookies containing `refreshToken` and `sessionId`, which are used for session management. These cookies are securely stored and not accessible via JavaScript.",
+                "example": "refreshToken=Uy%2BDTZ6%2FlEmOk7wETF4TiNTqC8nEJq6pvxq%2B9DiB, sessionId=j%3A%22677e1c08e9b66d3fe13f769a%22",
                 "schema": {
                   "type": "string"
                 }
@@ -260,7 +268,7 @@
             "description": "Successfully refreshed user session. New cookies are set in the response.",
             "headers": {
               "Set-Cookie": {
-                "description": "HttpOnly cookies containing `refreshToken` and `sessionId`, which are used for session management. These cookies are securely stored and not accessible via JavaScript.",
+                "example": "refreshToken=Uy%2BDTZ6%2FlEmOk7wETF4TiNTqC8nEJq6pvxq%2B9DiB, sessionId=j%3A%22677e1c08e9b66d3fe13f769a%22",
                 "schema": {
                   "type": "string"
                 }
@@ -586,8 +594,8 @@
               }
             }
           },
-          "400": {
-            "$ref": "#/components/responses/400"
+          "404": {
+            "$ref": "#/components/responses/404"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1066,6 +1074,9 @@
                         },
                         {
                           "example": "Token is invalid or expired"
+                        },
+                        {
+                          "example": "Old password is incorrect"
                         }
                       ]
                     }
@@ -1109,9 +1120,6 @@
                       "type": "string",
                       "description": "Detailed error explanation.",
                       "oneOf": [
-                        {
-                          "example": "Contact not found"
-                        },
                         {
                           "example": "Route not found"
                         },

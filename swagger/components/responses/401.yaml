@@ -34,3 +34,4 @@ content:
                 - example: "Unauthorized"
                 - example: "Session token expired"
                 - example: "Token is invalid or expired"
+                - example: "Old password is incorrect"

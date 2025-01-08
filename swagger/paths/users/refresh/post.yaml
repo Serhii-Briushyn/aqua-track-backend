@@ -32,7 +32,9 @@ responses:
     description: Successfully refreshed user session. New cookies are set in the response.
     headers:
       Set-Cookie:
-        description: HttpOnly cookies containing `refreshToken` and `sessionId`, which are used for session management. These cookies are securely stored and not accessible via JavaScript.
+        example: refreshToken=Uy%2BDTZ6%2FlEmOk7wETF4TiNTqC8nEJq6pvxq%2B9DiB,
+          sessionId=j%3A%22677e1c08e9b66d3fe13f769a%22
+
         schema:
           type: string
     content:
