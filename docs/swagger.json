@@ -758,7 +758,7 @@
         }
       }
     },
-    "/users/get-oauth-url": {
+    "/users/google-oauth-url": {
       "get": {
         "tags": [
           "Auth"
@@ -812,7 +812,7 @@
         }
       }
     },
-    "/users/confirm-oauth": {
+    "/users/google-login": {
       "post": {
         "tags": [
           "Auth"
@@ -868,8 +868,11 @@
                       "properties": {
                         "accessToken": {
                           "type": "string",
-                          "description": "Access token.",
+                          "description": "Access token for accessing protected resources.",
                           "example": "pJK+TbhNzRIz1BVL9rf4JXrvuYM4ecbdaoRf+22v"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/user"
                         }
                       }
                     }

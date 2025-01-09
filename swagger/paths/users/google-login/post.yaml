@@ -41,8 +41,10 @@ responses:
               properties:
                 accessToken:
                   type: string
-                  description: Access token.
+                  description: Access token for accessing protected resources.
                   example: "pJK+TbhNzRIz1BVL9rf4JXrvuYM4ecbdaoRf+22v"
+                user:
+                  $ref: ../../../components/schemas/user.yaml
   "400":
     $ref: ../../../components/responses/400.yaml
   "401":

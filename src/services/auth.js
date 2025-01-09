@@ -267,6 +267,7 @@ export const resetPasswordService = async (resetData) => {
 export const loginOrSignupWithGoogle = async (code) => {
   const loginTicket = await validateCode(code);
   const payload = loginTicket.getPayload();
+
   if (!payload) throw createHttpError(401);
 
   let user = await UsersCollection.findOne({ email: payload.email });
@@ -281,8 +282,10 @@ export const loginOrSignupWithGoogle = async (code) => {
 
   const newSession = createSession();
 
-  return await SessionsCollection.create({
+  const session = await SessionsCollection.create({
     userId: user._id,
     ...newSession,
   });
+
+  return { session, user };
 };
