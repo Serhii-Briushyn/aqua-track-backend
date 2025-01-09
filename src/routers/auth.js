@@ -73,10 +73,10 @@ router.post(
   ctrlWrapper(resetPasswordController),
 );
 
-router.get("/get-oauth-url", ctrlWrapper(getGoogleOAuthUrlController));
+router.get("/google-oauth-url", ctrlWrapper(getGoogleOAuthUrlController));
 
 router.post(
-  "/confirm-oauth",
+  "/google-login",
   validateBody(loginWithGoogleOAuthSchema),
   ctrlWrapper(loginWithGoogleController),
 );
