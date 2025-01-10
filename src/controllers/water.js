@@ -11,7 +11,7 @@ export const createWaterController = async (req, res) => {
     const data = {
         ...req.body,
         owner: req.user.id,
-        norm: req.user.waterNorm || 2000,
+        norm: req.body.norm || req.user.waterNorm || 2000,
         date: req.body.date || new Date().toISOString(),
     };
 
