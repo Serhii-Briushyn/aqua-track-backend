@@ -101,13 +101,22 @@ export const getDailyWater = async (userId, date) => {
 
 // Get monthly water consumption
 export const getMonthlyWater = async (userId, month, year) => {
+    if (!month || !year) {
+        throw new Error('Both "month" and "year" parameters are required.');
+    }
+
     const startOfMonth = new Date(Date.UTC(year, month - 1, 1));
     const endOfMonth = new Date(Date.UTC(year, month, 0, 23, 59, 59, 999));
 
-    const monthlyData = await WaterCollection.find({
-        owner: mongoose.Types.ObjectId(userId),
+    const filter = {
+        owner: mongoose.Types.ObjectId.isValid(userId) && typeof userId === 'string'
+            ? new mongoose.Types.ObjectId(userId)
+            : userId,
         date: { $gte: startOfMonth, $lte: endOfMonth },
-    });
+    };
+
+    const monthlyData = await WaterCollection.find(filter);
+
 
     const groupedByDate = monthlyData.reduce((acc, { date, amount, percentage }) => {
         const day = new Date(date).getUTCDate();
@@ -116,6 +125,7 @@ export const getMonthlyWater = async (userId, month, year) => {
         acc[day].percentage += percentage;
         return acc;
     }, {});
+
 
     const daysInMonth = new Date(year, month, 0).getDate();
     const result = Array.from({ length: daysInMonth }, (_, i) => {
