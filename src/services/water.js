@@ -1,6 +1,7 @@
 // src/services/water.js
-import { WaterCollection } from '../db/models/water.js';
 import mongoose from 'mongoose';
+import { WaterCollection } from '../db/models/water.js';
+
 
 
 //create water
@@ -65,26 +66,38 @@ export const deleteWaterById = async (waterId) => {
 // Get daily water consumption
 export const getDailyWater = async (userId, date) => {
     const startOfDay = new Date(date);
-
     startOfDay.setUTCHours(0, 0, 0, 0);
 
     const endOfDay = new Date(date);
     endOfDay.setUTCHours(23, 59, 59, 999);
 
-    const dailyData = await WaterCollection.find({
-        owner: mongoose.Types.ObjectId(userId),
+    const filter = {
+        owner: mongoose.Types.ObjectId.isValid(userId) && typeof userId === 'string'
+            ? new mongoose.Types.ObjectId(userId)
+            : userId,
         date: { $gte: startOfDay, $lte: endOfDay },
-    });
+    };
+
+    const dailyData = await WaterCollection.find(filter);
+
+    if (!dailyData.length) {
+        return {
+            value: [],
+            totalAmount: 0,
+            totalPercentage: 0,
+        };
+    }
 
     const totalAmount = dailyData.reduce((acc, curr) => acc + curr.amount, 0);
-    const totalPercentage = dailyData.reduce((acc, curr) => acc + curr.percentage, 0).toFixed(2);
+    const totalPercentage = Number(dailyData.reduce((acc, curr) => acc + curr.percentage, 0).toFixed(2));
 
     return {
-        value: dailyData.map(({ _id, owner, ...rest }) => ({ id: _id, ...rest })),
+        value: dailyData.map(({ _id, ...rest }) => ({ id: _id, ...rest })),
         totalAmount,
         totalPercentage,
     };
 };
+
 
 // Get monthly water consumption
 export const getMonthlyWater = async (userId, month, year) => {
