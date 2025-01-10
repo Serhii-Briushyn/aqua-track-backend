@@ -1,0 +1,57 @@
+# swagger/ paths/ water/{id}/get-monthly.yaml
+
+tags:
+  - Water
+summary: Get monthly water consumption data
+description: This endpoint allows users to retrieve their monthly water consumption data.
+operationId: getMonthlyWaterConsumption
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: month
+    required: true
+    description: The month for which to retrieve the water consumption data
+    schema:
+      type: integer
+      example: 1
+  - in: query
+    name: year
+    required: true
+    description: The year for which to retrieve the water consumption data
+    schema:
+      type: integer
+      example: 2025
+responses:
+  '200':
+    description: Monthly water consumption data successfully retrieved
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: "Monthly water consumption data retrieved successfully."
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date-time
+                    example: "2025-01-01T00:00:00.000Z"
+                  amount:
+                    type: number
+                    example: 2000
+                  percentage:
+                    type: string
+                    example: "100.00"
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

@@ -1,0 +1,70 @@
+# swagger/ paths/ water/post.yaml
+
+tags:
+  - Water
+summary: Create a new water consumption record
+description: This endpoint allows users to create a new water consumption record.
+operationId: createWaterRecord
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          amount:
+            type: number
+            description: Amount of water consumed (in milliliters)
+            example: 4000
+          norm:
+            type: number
+            description: User's daily water consumption norm (in milliliters)
+            example: 2000
+          date:
+            type: string
+            format: date-time
+            description: Date of water consumption
+            example: "2025-01-10T20:31:11.935Z"
+responses:
+  '201':
+    description: Water consumption record successfully created
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: "Successfully created a water!"
+            data:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "6781838fc9e96d2dc67690fd"
+                amount:
+                  type: number
+                  example: 4000
+                norm:
+                  type: number
+                  example: 2000
+                percentage:
+                  type: number
+                  example: 200
+                createdAt:
+                  type: string
+                  format: date-time
+                  example: "2025-01-10T20:31:11.936Z"
+                updatedAt:
+                  type: string
+                  format: date-time
+                  example: "2025-01-10T20:31:11.936Z"
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

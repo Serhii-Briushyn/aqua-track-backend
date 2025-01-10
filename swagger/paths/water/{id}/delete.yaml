@@ -1,0 +1,24 @@
+# swagger/ paths/ water/{id}/delete.yaml
+
+tags:
+  - Water
+summary: Delete a water consumption record
+description: This endpoint allows users to delete a water consumption record.
+operationId: deleteWaterRecord
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    description: The unique ID of the water record to delete
+    schema:
+    type: string
+    example: "6781838fc9e96d2dc67690fd"
+      responses:
+        '204':
+          description: Water consumption record successfully deleted
+        '404':
+          $ref: ../../components/responses/404.yaml
+        '500':
+          $ref: ../../components/responses/500.yaml
