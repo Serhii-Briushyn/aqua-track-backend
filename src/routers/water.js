@@ -12,6 +12,7 @@ import {
 } from "../controllers/water.js";
 import { createWaterSchema } from '../validation/water.js';
 import { updateWaterSchema } from '../validation/water.js';
+import { isValidId } from '../middlewares/isValidId.js';
 
 
 const router = Router();
@@ -25,11 +26,12 @@ router.post("/",
 
 router.patch(
     "/:id",
+    isValidId,
     validateBody(updateWaterSchema),
     ctrlWrapper(updateWaterController)
 );
 
-router.delete("/:id", ctrlWrapper(deleteWaterController));
+router.delete("/:id", isValidId, ctrlWrapper(deleteWaterController));
 
 router.get(
     "/daily",
