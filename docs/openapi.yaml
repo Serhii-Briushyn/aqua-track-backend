@@ -45,6 +45,20 @@ paths:
   /users/google-login:
     post:
       $ref: ../swagger/paths/users/google-login/post.yaml
+  /water:
+    post:
+      $ref: ../swagger/paths/water/post.yaml
+  /water/{id}:
+    patch:
+      $ref: ../swagger/paths/water/{id}/patch.yaml
+    delete:
+      $ref: ../swagger/paths/water/{id}/delete.yaml
+  /water/daily:
+    get:
+      $ref: ../swagger/paths/water/get-daily.yaml
+    /water/monthly:
+    get:
+      $ref: ../swagger/paths/water/get-monthly.yaml
 components:
   securitySchemes:
     bearerAuth:

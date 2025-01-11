@@ -1,0 +1,47 @@
+# swagger/ components / schemas/ water.yaml
+
+type: object
+properties:
+  _id:
+    type: string
+    description: Water consumption record ID
+    example: "6781838fc9e96d2dc67690fd"
+  amount:
+    type: number
+    format: float
+    description: Amount of water consumed
+    example: 4000
+  date:
+    type: string
+    format: date-time
+    description: Date of water consumption (ISO 8601).
+    example: "2025-01-10T20:31:11.935Z"
+  norm:
+    type: number
+    format: float
+    description: Water norm for a given user in milliliters.
+    example: 2000
+  percentage:
+    type: number
+    format: float
+    description: Percentage of normal water consumption.
+    example: 100
+  owner:
+    type: string
+    description: ID of the owner of the water consumption record (link to the user).
+    example: "60d21b4667d0d8992e610c85"
+  createdAt:
+    type: string
+    format: date-time
+    description: Record creation time (ISO 8601).
+    example: "2025-01-10T20:31:11.936Z"
+  updatedAt:
+    type: string
+    format: date-time
+    description: Time when the record was last updated (ISO 8601).
+    example: "2025-01-10T20:31:11.936Z"
+required:
+  - amount
+  - date
+  - norm
+  - owner
