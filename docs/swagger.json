@@ -11,13 +11,20 @@
   },
   "servers": [
     {
+      "url": "https://aqua-track-backend-4vct.onrender.com"
+    },
+    {
       "url": "http://127.0.0.1:3000"
     }
   ],
   "tags": [
     {
       "name": "Auth",
-      "description": "Authentication and token management endpoints."
+      "description": "Endpoints for user authentication, registration, and token management."
+    },
+    {
+      "name": "Water",
+      "description": "Endpoints for managing water consumption tracking and related data."
     }
   ],
   "paths": {
