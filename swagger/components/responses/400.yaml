@@ -27,5 +27,7 @@ content:
               description: Detailed error explanation.
               oneOf:
                 - example: "Invalid request body"
-                - example: "Invalid contact ID format"
+                - example: "Invalid ID format"
                 - example: "Session ID is required"
+                - example: 'The "date" query parameter is required.'
+                - example: 'The "month" and "year" query parameters are required.'

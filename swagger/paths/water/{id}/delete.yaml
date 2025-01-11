@@ -13,12 +13,16 @@ parameters:
     required: true
     description: The unique ID of the water record to delete
     schema:
-    type: string
-    example: "6781838fc9e96d2dc67690fd"
-      responses:
-        '204':
-          description: Water consumption record successfully deleted
-        '404':
-          $ref: ../../components/responses/404.yaml
-        '500':
-          $ref: ../../components/responses/500.yaml
+      type: string
+      example: "6781838fc9e96d2dc67690fd"
+responses:
+  "204":
+    description: Water consumption record successfully deleted
+  "400":
+    $ref: ../../../components/responses/400.yaml
+  "401":
+    $ref: ../../../components/responses/401.yaml
+  "404":
+    $ref: ../../../components/responses/404.yaml
+  "500":
+    $ref: ../../../components/responses/500.yaml

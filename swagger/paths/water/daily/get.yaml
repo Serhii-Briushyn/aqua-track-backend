@@ -16,7 +16,7 @@ parameters:
       type: string
       example: "2025-01-10"
 responses:
-  '200':
+  "200":
     description: Daily water consumption data successfully retrieved
     content:
       application/json:
@@ -29,31 +29,19 @@ responses:
             message:
               type: string
               example: "Daily water consumption data retrieved successfully."
-            value:
+            data:
               type: array
               items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    example: "67816eaff80de6af433bcf7a"
-                  amount:
-                    type: number
-                    example: 1500
-                  percentage:
-                    type: string
-                    example: "75.00"
-                  date:
-                    type: string
-                    format: date-time
-                    example: "2025-01-10T00:00:00.000Z"
+                $ref: ../../../components/schemas/water.yaml
             totalAmount:
               type: number
               example: 1500
             totalPercentage:
               type: number
               example: 75.00
-  '400':
-    $ref: ../../components/responses/400.yaml
-  '500':
-    $ref: ../../components/responses/500.yaml
+  "400":
+    $ref: ../../../components/responses/400.yaml
+  "401":
+    $ref: ../../../components/responses/401.yaml
+  "500":
+    $ref: ../../../components/responses/500.yaml

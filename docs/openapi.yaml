@@ -55,10 +55,10 @@ paths:
       $ref: ../swagger/paths/water/{id}/delete.yaml
   /water/daily:
     get:
-      $ref: ../swagger/paths/water/get-daily.yaml
-    /water/monthly:
+      $ref: ../swagger/paths/water/daily/get.yaml
+  /water/monthly:
     get:
-      $ref: ../swagger/paths/water/get-monthly.yaml
+      $ref: ../swagger/paths/water/monthly/get.yaml
 components:
   securitySchemes:
     bearerAuth:

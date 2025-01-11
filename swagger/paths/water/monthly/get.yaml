@@ -23,7 +23,7 @@ parameters:
       type: integer
       example: 2025
 responses:
-  '200':
+  "200":
     description: Monthly water consumption data successfully retrieved
     content:
       application/json:
@@ -49,9 +49,9 @@ responses:
                     type: number
                     example: 2000
                   percentage:
-                    type: string
-                    example: "100.00"
-  '400':
-    $ref: ../../components/responses/400.yaml
-  '500':
-    $ref: ../../components/responses/500.yaml
+                    type: number
+                    example: 100.00
+  "400":
+    $ref: ../../../components/responses/400.yaml
+  "500":
+    $ref: ../../../components/responses/500.yaml

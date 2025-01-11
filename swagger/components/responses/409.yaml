@@ -1,4 +1,4 @@
-description:  Conflict due to a resource already existing or conflicting with current state.
+description: Conflict due to a resource already existing or conflicting with current state.
 content:
   application/json:
     schema:

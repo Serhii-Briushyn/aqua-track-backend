@@ -12,8 +12,6 @@ cloudinary.v2.config({
 
 export const saveFileToCloudinary = async (file) => {
   const response = await cloudinary.v2.uploader.upload(file.path);
-  console.log("Unlinking file:", file.path);
   await fs.unlink(file.path);
-  console.log("File unlinked successfully");
   return response.secure_url;
 };

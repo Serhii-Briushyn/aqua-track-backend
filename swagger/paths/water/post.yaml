@@ -8,11 +8,12 @@ operationId: createWaterRecord
 security:
   - bearerAuth: []
 requestBody:
-  required: true
   content:
     application/json:
       schema:
         type: object
+        required:
+          - amount
         properties:
           amount:
             type: number
@@ -22,18 +23,23 @@ requestBody:
             type: number
             description: User's daily water consumption norm (in milliliters)
             example: 2000
+            default: 2000
           date:
             type: string
             format: date-time
             description: Date of water consumption
             example: "2025-01-10T20:31:11.935Z"
 responses:
-  '201':
+  "201":
     description: Water consumption record successfully created
     content:
       application/json:
         schema:
           type: object
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
@@ -42,29 +48,8 @@ responses:
               type: string
               example: "Successfully created a water!"
             data:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: "6781838fc9e96d2dc67690fd"
-                amount:
-                  type: number
-                  example: 4000
-                norm:
-                  type: number
-                  example: 2000
-                percentage:
-                  type: number
-                  example: 200
-                createdAt:
-                  type: string
-                  format: date-time
-                  example: "2025-01-10T20:31:11.936Z"
-                updatedAt:
-                  type: string
-                  format: date-time
-                  example: "2025-01-10T20:31:11.936Z"
-  '400':
+              $ref: ../../components/schemas/water.yaml
+  "400":
     $ref: ../../components/responses/400.yaml
-  '500':
+  "500":
     $ref: ../../components/responses/500.yaml

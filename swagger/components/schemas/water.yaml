@@ -40,8 +40,3 @@ properties:
     format: date-time
     description: Time when the record was last updated (ISO 8601).
     example: "2025-01-10T20:31:11.936Z"
-required:
-  - amount
-  - date
-  - norm
-  - owner

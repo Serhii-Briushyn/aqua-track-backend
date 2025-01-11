@@ -28,3 +28,4 @@ content:
               oneOf:
                 - example: "Route not found"
                 - example: "User not found"
+                - example: "Water record not found"
