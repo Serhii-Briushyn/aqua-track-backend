@@ -20,7 +20,10 @@ export const setupServer = () => {
 
   app.use(
     cors({
-      origin: env("ALLOWED_ORIGIN") || "http://localhost:5173",
+      origin: [
+        "http://localhost:5173",
+        "https://aqua-track-frontend-rouge.vercel.app",
+      ],
       credentials: true,
     }),
   );
