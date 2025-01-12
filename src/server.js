@@ -20,7 +20,7 @@ export const setupServer = () => {
 
   app.use(
     cors({
-      origin: env("ALLOWED_ORIGIN"),
+      origin: env("ALLOWED_ORIGIN") || "http://localhost:5173",
       credentials: true,
     }),
   );
