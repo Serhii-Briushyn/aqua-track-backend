@@ -22,17 +22,12 @@ const setupSession = (res, session) => {
     secure: true,
     sameSite: "None",
     expires: new Date(Date.now() + THIRTY_DAYS),
-    domain: "aqua-track-frontend-rouge.vercel.app",
-    path: "/", 
   });
-
   res.cookie("sessionId", session._id, {
     httpOnly: true,
     secure: true,
     sameSite: "None",
     expires: new Date(Date.now() + THIRTY_DAYS),
-    domain: "aqua-track-frontend-rouge.vercel.app",
-    path: "/",
   });
 };
 
