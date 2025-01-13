@@ -21,12 +21,14 @@ const setupSession = (res, session) => {
     httpOnly: true,
     secure: true,
     sameSite: "None",
+    domain: "aqua-track-frontend-rouge.vercel.app",
     expires: new Date(Date.now() + THIRTY_DAYS),
   });
   res.cookie("sessionId", session._id, {
     httpOnly: true,
     secure: true,
     sameSite: "None",
+    domain: "aqua-track-frontend-rouge.vercel.app",
     expires: new Date(Date.now() + THIRTY_DAYS),
   });
 };
@@ -144,6 +146,10 @@ export const updatePasswordController = async (req, res) => {
 
 export const getUserCountController = async (req, res) => {
   const count = await getUserCountService();
+
+  res.clearCookie("sessionId");
+  res.clearCookie("refreshToken");
+
   res.json({
     status: 200,
     message: "Users count retrieved successfully",
