@@ -8,7 +8,6 @@ import router from "./routers/index.js";
 import cookieParser from "cookie-parser";
 import { UPLOAD_DIR } from "./constants/index.js";
 import { swaggerDocs } from "./middlewares/swaggerDocs.js";
-import { generalCorsOptions } from "./utils/corsConfig.js";
 
 const PORT = Number(env("PORT", 3000));
 
@@ -19,7 +18,16 @@ export const setupServer = () => {
     express.json({ type: ["application/json", "application/vnd.api+json"] }),
   );
 
-  app.use(cors(generalCorsOptions));
+  app.use(
+    cors({
+      origin: [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://aqua-track-frontend-rouge.vercel.app",
+      ],
+      credentials: true,
+    }),
+  );
 
   app.use(cookieParser());
 

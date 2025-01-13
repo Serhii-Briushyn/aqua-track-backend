@@ -1,5 +1,4 @@
 import { Router } from "express";
-import cors from "cors";
 
 import { validateBody } from "../middlewares/validateBody.js";
 import {
@@ -27,7 +26,6 @@ import {
 } from "../controllers/auth.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { upload } from "../middlewares/multer.js";
-import { publicCorsOptions } from "../utils/corsConfig.js";
 
 const router = Router();
 
@@ -62,11 +60,7 @@ router.put(
   ctrlWrapper(updatePasswordController),
 );
 
-router.get(
-  "/count",
-  cors(publicCorsOptions),
-  ctrlWrapper(getUserCountController),
-);
+router.get("/count", ctrlWrapper(getUserCountController));
 
 router.post(
   "/forgot-password",
