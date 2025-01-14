@@ -21,7 +21,6 @@ export const setupServer = () => {
   app.use(
     cors({
       origin: [
-        "https://aqua-track-frontend.onrender.com",
         "http://localhost:5173",
         "http://localhost:5174",
         "https://aqua-track-frontend-rouge.vercel.app",
@@ -44,7 +43,7 @@ export const setupServer = () => {
 
   app.use("/api-docs", swaggerDocs());
 
-  app.use("/api", router);
+  app.use(router);
 
   app.use("*", notFoundHandler);
 
