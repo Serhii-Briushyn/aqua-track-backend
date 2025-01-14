@@ -145,9 +145,6 @@ export const updatePasswordController = async (req, res) => {
 export const getUserCountController = async (req, res) => {
   const count = await getUserCountService();
 
-  res.clearCookie("sessionId");
-  res.clearCookie("refreshToken");
-
   res.json({
     status: 200,
     message: "Users count retrieved successfully",
