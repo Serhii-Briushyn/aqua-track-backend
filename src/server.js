@@ -21,6 +21,7 @@ export const setupServer = () => {
   app.use(
     cors({
       origin: [
+        "https://aqua-track-frontend.onrender.com",
         "http://localhost:5173",
         "http://localhost:5174",
         "https://aqua-track-frontend-rouge.vercel.app",
