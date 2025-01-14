@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://aqua-track-backend-4vct.onrender.com"
+      "url": "https://aqua-track-backend-moj8.onrender.com"
     },
     {
       "url": "http://127.0.0.1:3000"
