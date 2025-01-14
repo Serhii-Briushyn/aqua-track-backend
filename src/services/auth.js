@@ -208,10 +208,17 @@ export const sendResetPasswordService = async (email) => {
     await fs.readFile(resetPasswordTemplatePath)
   ).toString();
 
+  const encodedToken = encodeURIComponent(resetToken);
+  const link = `${env("APP_DOMAIN").replace(
+    /\/$/,
+    "",
+  )}/reset-password?token=${encodedToken}`;
+
+
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: `${env("APP_DOMAIN")}/reset-password?token=${resetToken}`,
+    link,
   });
 
   try {
@@ -252,11 +259,11 @@ export const resetPasswordService = async (resetData) => {
     throw createHttpError(404, "User not found");
   }
 
-  const encryptedPassword = await bcrypt.hash(resetData.password, 10);
+  const encryptedPassword = await bcrypt.hash(resetData.newPassword, 10);
 
   await UsersCollection.updateOne(
     { _id: user._id },
-    { password: encryptedPassword },
+    { newPassword: encryptedPassword },
   );
 
   await SessionsCollection.deleteMany({ userId: user._id });
