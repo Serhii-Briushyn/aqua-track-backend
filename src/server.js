@@ -20,7 +20,11 @@ export const setupServer = () => {
 
   app.use(
     cors({
-      origin: ["https://aqua-track.briushyn.dev", "http://localhost:5173"],
+      origin: [
+        "https://aqua-track.briushyn.dev",
+        "https://api.briushyn.dev",
+        "http://localhost:5173",
+      ],
       credentials: true,
     }),
   );
