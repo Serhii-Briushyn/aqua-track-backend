@@ -12,7 +12,7 @@ tags:
   - name: Water
     description: Endpoints for managing water consumption tracking and related data.
 servers:
-  - url: https://aqua-track-backend-moj8.onrender.com
+  - url: https://api.briushyn.dev
   - url: http://127.0.0.1:3000
 paths:
   /users/register:
