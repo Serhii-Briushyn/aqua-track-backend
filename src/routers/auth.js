@@ -13,6 +13,7 @@ import {
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import {
   getGoogleOAuthUrlController,
+  getUserController,
   getUserCountController,
   loginUserController,
   loginWithGoogleController,
@@ -44,6 +45,12 @@ router.post(
 router.post("/refresh", ctrlWrapper(refreshUserSessionController));
 
 router.post("/logout", ctrlWrapper(logoutUserController));
+
+router.get(
+  "/me",
+  authenticate,
+  ctrlWrapper(getUserController),
+);
 
 router.put(
   "/update-user",

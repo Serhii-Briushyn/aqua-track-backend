@@ -133,6 +133,16 @@ export const logoutUserService = async (sessionId) => {
   await SessionsCollection.deleteOne({ _id: sessionId });
 };
 
+//--------------------getUserService--------------------
+
+export const getUserService = async (userId) => {
+  const user = await UsersCollection.findById(userId);
+  if (!user) {
+    throw createHttpError(404, "User not found");
+  }
+  return user;
+};
+
 //--------------------updateUserService--------------------
 
 export const updateUserService = async (userId, updates) => {

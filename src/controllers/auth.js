@@ -1,6 +1,7 @@
 import { THIRTY_DAYS } from "../constants/index.js";
 import {
   getUserCountService,
+  getUserService,
   loginOrSignupWithGoogle,
   loginUserService,
   logoutUserService,
@@ -92,6 +93,19 @@ export const logoutUserController = async (req, res) => {
   res.clearCookie("refreshToken");
 
   res.status(204).send();
+};
+
+//--------------------getUserController--------------------
+
+export const getUserController = async (req, res) => {
+  const user = req.user;
+  const userData = await getUserService(user._id);
+
+  res.json({
+    status: 200,
+    message: "User data retrieved successfully",
+    data: userData,
+  });
 };
 
 //--------------------updateUserController--------------------
