@@ -394,7 +394,7 @@
       }
     },
     "/users/me": {
-      "post": {
+      "get": {
         "tags": [
           "Auth"
         ],

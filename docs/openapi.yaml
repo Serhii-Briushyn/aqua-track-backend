@@ -28,7 +28,7 @@ paths:
     post:
       $ref: ../swagger/paths/users/logout/post.yaml
   /users/me:
-    post:
+    get:
       $ref: ../swagger/paths/users/me/get.yaml
   /users/update-user:
     put:
