@@ -2,13 +2,13 @@
 import { createWater } from '../services/water.js';
 import { updateWaterById } from '../services/water.js';
 import { deleteWaterById } from '../services/water.js';
-import { getDailyWater, getMonthlyWater } from '../services/water.js';
+import { getDailyWater, getMonthlyWater, getWeeklyWater } from '../services/water.js';
 import createHttpError from 'http-errors';
 
 
 // create
 export const createWaterController = async (req, res) => {
-    
+
     const data = {
         ...req.body,
         owner: req.user.id,
@@ -102,4 +102,22 @@ export const getMonthlyWaterController = async (req, res, next) => {
         data: result,
     });
 
+};
+
+// Get weekly water consumption
+export const getWeeklyWaterController = async (req, res, next) => {
+    const userId = req.user.id;
+    const { startDate } = req.query;
+
+    if (!startDate) {
+        throw createHttpError(400, 'The "startDate" query parameter is required.');
+    }
+
+    const result = await getWeeklyWater(userId, startDate);
+
+    res.status(200).json({
+        status: 200,
+        message: "Weekly water consumption data retrieved successfully.",
+        data: result,
+    });
 };

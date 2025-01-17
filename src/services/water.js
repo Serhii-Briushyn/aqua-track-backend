@@ -153,3 +153,48 @@ export const getMonthlyWater = async (userId, month, year) => {
 
   return result;
 };
+
+// Get weekly water consumption
+export const getWeeklyWater = async (userId, startDate) => {
+  const startOfWeek = new Date(startDate);
+  startOfWeek.setUTCHours(0, 0, 0, 0); // Начало недели (в понедельник)
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6); // Конец недели (в воскресенье)
+  endOfWeek.setUTCHours(23, 59, 59, 999);
+
+  const weeklyData = await WaterCollection.find({
+    owner: new mongoose.Types.ObjectId(userId),
+    date: {
+      $gte: startOfWeek,
+      $lte: endOfWeek,
+    },
+  }).lean();
+
+  if (!weeklyData || weeklyData.length === 0) {
+    return {
+      data: [],
+      totalAmount: 0,
+      totalPercentage: 0,
+    };
+  }
+
+  const totalAmount = weeklyData.reduce((acc, curr) => acc + curr.amount, 0);
+
+  const currentNorm = weeklyData[weeklyData.length - 1].norm;
+
+  const totalPercentage = parseFloat(
+    ((totalAmount / currentNorm) * 100).toFixed(2),
+  );
+
+  const data = weeklyData.map(({ _id, ...rest }) => ({
+    id: _id,
+    ...rest,
+  }));
+
+  return {
+    data,
+    totalAmount,
+    totalPercentage,
+  };
+};
