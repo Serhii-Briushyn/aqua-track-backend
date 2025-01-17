@@ -83,7 +83,7 @@ router.post(
 
 router.get("/google-oauth-url", ctrlWrapper(getGoogleOAuthUrlController));
 
-router.post(
+router.get(
   "/google-login",
   validateBody(loginWithGoogleOAuthSchema),
   ctrlWrapper(loginWithGoogleController),
