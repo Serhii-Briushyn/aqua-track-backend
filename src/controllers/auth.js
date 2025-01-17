@@ -213,6 +213,7 @@ export const loginWithGoogleController = async (req, res) => {
   const { session, user } = await loginOrSignupWithGoogle(code);
   setupSession(res, session);
 
+  res.redirect(302, env("ALLOWED_ORIGIN"));
   res.json({
     status: 200,
     message: "Successfully logged in via Google OAuth!",

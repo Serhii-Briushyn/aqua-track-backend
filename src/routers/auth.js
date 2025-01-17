@@ -3,7 +3,6 @@ import { Router } from "express";
 import { validateBody } from "../middlewares/validateBody.js";
 import {
   loginUserSchema,
-  // loginWithGoogleOAuthSchema,
   registerUserSchema,
   resetPasswordSchema,
   sendResetPasswordSchema,
@@ -46,11 +45,7 @@ router.post("/refresh", ctrlWrapper(refreshUserSessionController));
 
 router.post("/logout", ctrlWrapper(logoutUserController));
 
-router.get(
-  "/me",
-  authenticate,
-  ctrlWrapper(getUserController),
-);
+router.get("/me", authenticate, ctrlWrapper(getUserController));
 
 router.put(
   "/update-user",
@@ -83,10 +78,6 @@ router.post(
 
 router.get("/google-oauth-url", ctrlWrapper(getGoogleOAuthUrlController));
 
-router.get(
-  "/google-login",
-  // validateBody(loginWithGoogleOAuthSchema),
-  ctrlWrapper(loginWithGoogleController),
-);
+router.get("/google-login", ctrlWrapper(loginWithGoogleController));
 
 export default router;
