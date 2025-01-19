@@ -153,3 +153,66 @@ export const getMonthlyWater = async (userId, month, year) => {
 
   return result;
 };
+
+
+// Get weekly water consumption
+export const getWeeklyWater = async (userId, startDate) => {
+  const startOfWeek = new Date(startDate);
+  startOfWeek.setUTCHours(0, 0, 0, 0);
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
+  endOfWeek.setUTCHours(23, 59, 59, 999);
+
+  // data from all week
+  const weeklyData = await WaterCollection.find({
+    owner: new mongoose.Types.ObjectId(userId),
+    date: { $gte: startOfWeek, $lte: endOfWeek },
+  }).lean();
+
+  if (!weeklyData || weeklyData.length === 0) {
+    return {
+      data: [],
+      totalAmount: 0,
+      totalNorm: 0,
+      totalPercentage: 0,
+    };
+  }
+
+  // group data
+  const groupedByDay = weeklyData.reduce((acc, { date, amount, norm }) => {
+    const day = new Date(date).getUTCDay();
+    if (!acc[day]) acc[day] = { amount: 0, norm: 0 };
+    acc[day].amount += amount;
+    acc[day].norm = norm || acc[day].norm; // norm update if we have
+    return acc;
+  }, {});
+
+  // sum data per week
+  const totalAmount = weeklyData.reduce((sum, { amount }) => sum + amount, 0);
+  const totalNorm = Object.values(groupedByDay).reduce(
+    (sum, day) => sum + (day.norm || 0),
+    0
+  );
+
+  const totalPercentage = totalNorm
+    ? parseFloat(((totalAmount / totalNorm) * 100).toFixed(2))
+    : 0;
+
+
+  const data = Object.entries(groupedByDay).map(([day, { amount, norm }]) => ({
+    day: parseInt(day, 10),
+    amount,
+    norm,
+    percentage: norm ? parseFloat(((amount / norm) * 100).toFixed(2)) : 0,
+  }));
+
+  return {
+    data,
+    totalAmount,
+    totalNorm,
+    totalPercentage,
+  };
+};
+
+

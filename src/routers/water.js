@@ -9,6 +9,7 @@ import {
     deleteWaterController,
     getDailyWaterController,
     getMonthlyWaterController,
+    getWeeklyWaterController,
 } from "../controllers/water.js";
 import { createWaterSchema } from '../validation/water.js';
 import { updateWaterSchema } from '../validation/water.js';
@@ -42,4 +43,10 @@ router.get(
     "/monthly",
     ctrlWrapper(getMonthlyWaterController)
 );
+
+router.get(
+    "/weekly",
+    ctrlWrapper(getWeeklyWaterController)
+);
+
 export default router;
