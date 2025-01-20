@@ -34,9 +34,6 @@ paths:
     put:
       $ref: ../swagger/paths/users/update-user/put.yaml
   /users/update-password:
-    put:
-      $ref: ../swagger/paths/users/update-password/put.yaml
-  /users/count:
     get:
       $ref: ../swagger/paths/users/count/get.yaml
   /users/forgot-password:
@@ -45,6 +42,9 @@ paths:
   /users/google-oauth-url:
     get:
       $ref: ../swagger/paths/users/google-oauth-url/get.yaml
+  /users/google-login:
+    post:
+      $ref: ../swagger/paths/users/google-login/post.yaml
   /water:
     post:
       $ref: ../swagger/paths/water/post.yaml

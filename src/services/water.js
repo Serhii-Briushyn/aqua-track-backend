@@ -154,7 +154,6 @@ export const getMonthlyWater = async (userId, month, year) => {
   return result;
 };
 
-
 // Get weekly water consumption
 export const getWeeklyWater = async (userId, startDate) => {
   const startOfWeek = new Date(startDate);
@@ -192,13 +191,12 @@ export const getWeeklyWater = async (userId, startDate) => {
   const totalAmount = weeklyData.reduce((sum, { amount }) => sum + amount, 0);
   const totalNorm = Object.values(groupedByDay).reduce(
     (sum, day) => sum + (day.norm || 0),
-    0
+    0,
   );
 
   const totalPercentage = totalNorm
     ? parseFloat(((totalAmount / totalNorm) * 100).toFixed(2))
     : 0;
-
 
   const data = Object.entries(groupedByDay).map(([day, { amount, norm }]) => ({
     day: parseInt(day, 10),
@@ -214,5 +212,3 @@ export const getWeeklyWater = async (userId, startDate) => {
     totalPercentage,
   };
 };
-
-
