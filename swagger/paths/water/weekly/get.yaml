@@ -1,0 +1,51 @@
+tags:
+  - Water
+summary: Get weekly water consumption data
+description: This endpoint allows users to retrieve their weekly water consumption data.
+operationId: getWeeklyWaterConsumption
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: startDate
+    required: true
+    description: The start date of the week for which to retrieve the water consumption data (in ISO format, e.g., 2025-01-15).
+    schema:
+      type: string
+      format: date
+      example: "2025-01-15"
+responses:
+  "200":
+    description: Weekly water consumption data successfully retrieved
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: "Weekly water consumption data retrieved successfully."
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  day:
+                    type: integer
+                    description: Day of the week (0 = Sunday, 6 = Saturday).
+                    example: 1
+                  amount:
+                    type: number
+                    description: Total water consumed on that day.
+                    example: 2000
+                  percentage:
+                    type: number
+                    description: Percentage of the daily norm achieved.
+                    example: 100.00
+  "400":
+    $ref: ../../../components/responses/400.yaml
+  "500":
+    $ref: ../../../components/responses/500.yaml
