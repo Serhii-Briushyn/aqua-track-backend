@@ -19,6 +19,7 @@ import {
   getFullNameFromGoogleTokenPayload,
   validateCode,
 } from "../utils/googleOAuth2.js";
+import { WaterCollection } from "../db/models/water.js";
 
 const createSession = (userId) => {
   const accessToken = randomBytes(30).toString("base64");
@@ -146,16 +147,35 @@ export const getUserService = async (userId) => {
 //--------------------updateUserService--------------------
 
 export const updateUserService = async (userId, updates) => {
-  const user = await UsersCollection.findByIdAndUpdate(userId, updates, {
-    new: true,
-    runValidators: true,
-  });
+  const user = await UsersCollection.findById(userId);
 
   if (!user) {
     throw createHttpError(404, "User not found");
   }
 
-  return user;
+  const isWaterNormUpdated =
+    updates.waterNorm && updates.waterNorm !== user.waterNorm;
+
+  const updatedUser = await UsersCollection.findByIdAndUpdate(userId, updates, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updatedUser) {
+    throw createHttpError(404, "User not found after update");
+  }
+
+  if (isWaterNormUpdated) {
+    await WaterCollection.updateMany(
+      { owner: userId },
+      {
+        $set: { norm: updates.waterNorm },
+        $mul: { percentage: (1 / updates.waterNorm) * 100 },
+      },
+    );
+  }
+
+  return updatedUser;
 };
 
 //--------------------updatePasswordService--------------------
