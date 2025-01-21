@@ -2,10 +2,13 @@
 import mongoose from "mongoose";
 import { WaterCollection } from "../db/models/water.js";
 
-//create water
-
+// create water
 export const createWater = async (payload) => {
-  const { amount, norm = 2000, owner, ...rest } = payload;
+  const { amount, norm = 2000, owner, date, ...rest } = payload;
+
+  const userDate = date ? new Date(date) : new Date();
+
+  const dateInUTC = new Date(userDate.getTime() - userDate.getTimezoneOffset() * 60000);
 
   const percentage = ((amount / norm) * 100).toFixed(2);
 
@@ -14,6 +17,7 @@ export const createWater = async (payload) => {
     norm,
     percentage,
     owner,
+    date: dateInUTC,
     ...rest,
   });
 
@@ -21,8 +25,7 @@ export const createWater = async (payload) => {
   return { id: _id, ...other };
 };
 
-//update water
-
+// update water
 export const updateWaterById = async (id, ownerId, payload) => {
   const waterRecord = await WaterCollection.findOne({
     _id: id,
@@ -50,8 +53,7 @@ export const updateWaterById = async (id, ownerId, payload) => {
   return updatedWater ? updatedWater.toObject() : null;
 };
 
-//delete water
-
+// delete water
 export const deleteWaterById = async (waterId) => {
   const water = await WaterCollection.findByIdAndDelete(waterId);
 
@@ -62,7 +64,6 @@ export const deleteWaterById = async (waterId) => {
 };
 
 // Get daily water consumption
-
 export const getDailyWater = async (userId, date) => {
   const startOfDay = new Date(date);
   startOfDay.setUTCHours(0, 0, 0, 0);
@@ -107,7 +108,6 @@ export const getDailyWater = async (userId, date) => {
 };
 
 // Get monthly water consumption
-
 export const getMonthlyWater = async (userId, month, year) => {
   if (!month || !year) {
     throw new Error("Both 'month' and 'year' parameters are required.");
@@ -128,25 +128,21 @@ export const getMonthlyWater = async (userId, month, year) => {
     const day = new Date(date).getUTCDate();
     if (!acc[day]) acc[day] = { amount: 0, norm: 0 };
     acc[day].amount += amount;
-    acc[day].norm = norm;
+    acc[day].norm = norm || 2000;
     return acc;
   }, {});
 
-  const totalNorm = Object.values(groupedByDate).reduce(
-    (acc, { norm }) => acc + norm,
-    0,
-  );
-
   const daysInMonth = new Date(year, month, 0).getDate();
+
   const result = Array.from({ length: daysInMonth }, (_, i) => {
     const day = i + 1;
-    const data = groupedByDate[day] || { amount: 0, norm: totalNorm };
+    const data = groupedByDate[day] || { amount: 0, norm: 2000 };
 
     return {
       date: new Date(Date.UTC(year, month - 1, day)).toISOString(),
       amount: data.amount,
       percentage: data.norm
-        ? parseFloat(((data.amount / totalNorm) * 100).toFixed(2))
+        ? parseFloat(((data.amount / data.norm) * 100).toFixed(2))
         : 0,
     };
   });
