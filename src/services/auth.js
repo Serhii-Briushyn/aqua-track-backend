@@ -268,15 +268,20 @@ export const sendResetPasswordService = async (email) => {
 //--------------------resetPasswordService--------------------
 
 export const resetPasswordService = async (resetData) => {
+  console.log("Received token on server:", resetData.token);
+  console.log("Received password on server:", resetData.newPassword);
+
   let entries;
 
   try {
     entries = jwt.verify(resetData.token, env("JWT_SECRET"));
+    console.log("Decoded token:", entries);
   } catch (err) {
-    if (err) {
-      throw createHttpError(401, "Token is invalid or expired.");
+    if (err.name === "TokenExpiredError") {
+      throw createHttpError(401, "Token has expired.");
     }
-    throw err;
+    console.error("Token verification error:", err);
+    throw createHttpError(401, "Invalid token.");
   }
 
   const user = await UsersCollection.findOne({
