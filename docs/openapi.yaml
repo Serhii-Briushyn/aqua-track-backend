@@ -34,11 +34,17 @@ paths:
     put:
       $ref: ../swagger/paths/users/update-user/put.yaml
   /users/update-password:
+    put:
+      $ref: ../swagger/paths/users/update-password/put.yaml
+  /users/count:
     get:
       $ref: ../swagger/paths/users/count/get.yaml
   /users/forgot-password:
     post:
       $ref: ../swagger/paths/users/forgot-password/post.yaml
+  /users/reset-password:
+    post:
+      $ref: ../swagger/paths/users/reset-password/post.yaml
   /users/google-oauth-url:
     get:
       $ref: ../swagger/paths/users/google-oauth-url/get.yaml
