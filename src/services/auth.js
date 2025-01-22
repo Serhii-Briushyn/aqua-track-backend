@@ -221,7 +221,7 @@ export const sendResetPasswordService = async (email) => {
   const resetToken = jwt.sign(
     {
       sub: user._id,
-      email,
+      email: user.email,
     },
     env("JWT_SECRET"),
     {
@@ -291,7 +291,7 @@ export const resetPasswordService = async (resetData) => {
   }
 
   const encryptedPassword = await bcrypt.hash(resetData.newPassword, 10);
-
+  console.log("Decoded token entries:", entries);
   const result = await UsersCollection.updateOne(
     { _id: user._id },
     { $set: { newPassword: encryptedPassword } },
