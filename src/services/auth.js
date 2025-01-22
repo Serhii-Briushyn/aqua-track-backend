@@ -228,17 +228,7 @@ export const sendResetPasswordService = async (email) => {
       expiresIn: "5m",
     },
   );
-
-  console.log("Generated token:", resetToken);
-
-  const encodedToken = encodeURIComponent(resetToken);
-
-  const link = `${env("APP_DOMAIN").replace(
-    /\/$/,
-    "",
-  )}/reset-password?token=${encodedToken}`;
-
-  console.log("Reset password link:", link);
+  
 
   const resetPasswordTemplatePath = path.join(
     TEMPLATES_DIR,
@@ -252,10 +242,8 @@ export const sendResetPasswordService = async (email) => {
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link,
+    link: `${env("APP_DOMAIN")}/reset-password?token=${resetToken}`,
   });
-
-  console.log("Generated email content:", html);
 
   try {
     await sendEmail({
@@ -264,8 +252,7 @@ export const sendResetPasswordService = async (email) => {
       subject: "Reset your password",
       html,
     });
-  } catch (error) {
-    console.error("Email sending failed:", error);
+  } catch {
     throw createHttpError(
       500,
       "Failed to send the email, please try again later.",
@@ -279,8 +266,6 @@ export const resetPasswordService = async (resetData) => {
   let entries;
 
   try {
-    console.log("Received token:", resetData.token);
-
     entries = jwt.verify(resetData.token, env("JWT_SECRET"));
     console.log("Decoded token:", entries);
   } catch (err) {
@@ -297,26 +282,17 @@ export const resetPasswordService = async (resetData) => {
   });
 
   if (!user) {
-    throw createHttpError(404, "User not found.");
+    throw createHttpError(404, "User not found");
   }
-  const encryptedPassword = await bcrypt.hash(resetData.newPassword, 10);
-  console.log("New encrypted password:", encryptedPassword);
 
-  const result = await UsersCollection.updateOne(
+  const encryptedPassword = await bcrypt.hash(resetData.password, 10);
+
+  await UsersCollection.updateOne(
     { _id: user._id },
-    { $set: { newPassword: encryptedPassword } },
+    { password: encryptedPassword },
   );
 
-  console.log("Password update result:", result);
-
-  if (result.modifiedCount === 0) {
-    throw createHttpError(500, "Password update failed.");
-  }
-
-  const sessionResult = await SessionsCollection.deleteMany({
-    userId: user._id,
-  });
-  console.log("Deleted sessions count:", sessionResult.deletedCount);
+  await SessionsCollection.deleteMany({ userId: user._id });
 };
 
 //--------------------loginOrSignupWithGoogle--------------------
