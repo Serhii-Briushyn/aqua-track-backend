@@ -229,6 +229,17 @@ export const sendResetPasswordService = async (email) => {
     },
   );
 
+  console.log("Generated token:", resetToken);
+
+  const encodedToken = encodeURIComponent(resetToken);
+
+  const link = `${env("APP_DOMAIN").replace(
+    /\/$/,
+    "",
+  )}/reset-password?token=${encodedToken}`;
+
+  console.log("Reset password link:", link);
+
   const resetPasswordTemplatePath = path.join(
     TEMPLATES_DIR,
     "reset-password-email.html",
@@ -238,17 +249,13 @@ export const sendResetPasswordService = async (email) => {
     await fs.readFile(resetPasswordTemplatePath)
   ).toString();
 
-  const encodedToken = encodeURIComponent(resetToken);
-  const link = `${env("APP_DOMAIN").replace(
-    /\/$/,
-    "",
-  )}/reset-password?token=${encodedToken}`;
-
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
     link,
   });
+
+  console.log("Generated email content:", html);
 
   try {
     await sendEmail({
@@ -257,7 +264,8 @@ export const sendResetPasswordService = async (email) => {
       subject: "Reset your password",
       html,
     });
-  } catch {
+  } catch (error) {
+    console.error("Email sending failed:", error);
     throw createHttpError(
       500,
       "Failed to send the email, please try again later.",
@@ -268,12 +276,11 @@ export const sendResetPasswordService = async (email) => {
 //--------------------resetPasswordService--------------------
 
 export const resetPasswordService = async (resetData) => {
-  console.log("Received token on server:", resetData.token);
-  console.log("Received password on server:", resetData.newPassword);
-
   let entries;
 
   try {
+    console.log("Received token:", resetData.token);
+
     entries = jwt.verify(resetData.token, env("JWT_SECRET"));
     console.log("Decoded token:", entries);
   } catch (err) {
@@ -290,17 +297,26 @@ export const resetPasswordService = async (resetData) => {
   });
 
   if (!user) {
-    throw createHttpError(404, "User not found");
+    throw createHttpError(404, "User not found.");
   }
-
   const encryptedPassword = await bcrypt.hash(resetData.newPassword, 10);
+  console.log("New encrypted password:", encryptedPassword);
 
-  await UsersCollection.updateOne(
+  const result = await UsersCollection.updateOne(
     { _id: user._id },
-    { newPassword: encryptedPassword },
+    { $set: { newPassword: encryptedPassword } },
   );
 
-  await SessionsCollection.deleteMany({ userId: user._id });
+  console.log("Password update result:", result);
+
+  if (result.modifiedCount === 0) {
+    throw createHttpError(500, "Password update failed.");
+  }
+
+  const sessionResult = await SessionsCollection.deleteMany({
+    userId: user._id,
+  });
+  console.log("Deleted sessions count:", sessionResult.deletedCount);
 };
 
 //--------------------loginOrSignupWithGoogle--------------------
