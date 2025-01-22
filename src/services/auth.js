@@ -267,7 +267,6 @@ export const resetPasswordService = async (resetData) => {
 
   try {
     entries = jwt.verify(resetData.token, env("JWT_SECRET"));
-    console.log("Decoded token:", entries);
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       throw createHttpError(401, "Token has expired.");
