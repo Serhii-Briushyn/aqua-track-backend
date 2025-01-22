@@ -221,7 +221,7 @@ export const sendResetPasswordService = async (email) => {
   const resetToken = jwt.sign(
     {
       sub: user._id,
-      email: user.email,
+      email,
     },
     env("JWT_SECRET"),
     {
@@ -271,9 +271,7 @@ export const resetPasswordService = async (resetData) => {
   let entries;
 
   try {
-    console.log("Received token:", resetData.token);
-    const entries = jwt.verify(resetData.token, env("JWT_SECRET"));
-    console.log("Decoded token:", entries);
+    entries = jwt.verify(resetData.token, env("JWT_SECRET"));
   } catch (err) {
     if (err) {
       throw createHttpError(401, "Token is invalid or expired.");
@@ -291,16 +289,11 @@ export const resetPasswordService = async (resetData) => {
   }
 
   const encryptedPassword = await bcrypt.hash(resetData.newPassword, 10);
-  console.log("Decoded token entries:", entries);
-  const result = await UsersCollection.updateOne(
-    { _id: user._id },
-    { $set: { newPassword: encryptedPassword } },
-  );
 
-  console.log("Password update result:", result); // Лог результата
-  if (result.modifiedCount === 0) {
-    throw createHttpError(500, "Password update failed."); // Бросьте ошибку, если пароль не обновлен
-  }
+  await UsersCollection.updateOne(
+    { _id: user._id },
+    { newPassword: encryptedPassword },
+  );
 
   await SessionsCollection.deleteMany({ userId: user._id });
 };
