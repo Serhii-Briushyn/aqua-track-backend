@@ -228,7 +228,6 @@ export const sendResetPasswordService = async (email) => {
       expiresIn: "5m",
     },
   );
-  
 
   const resetPasswordTemplatePath = path.join(
     TEMPLATES_DIR,
@@ -268,11 +267,10 @@ export const resetPasswordService = async (resetData) => {
   try {
     entries = jwt.verify(resetData.token, env("JWT_SECRET"));
   } catch (err) {
-    if (err.name === "TokenExpiredError") {
-      throw createHttpError(401, "Token has expired.");
+    if (err) {
+      throw createHttpError(401, "Token is invalid or expired.");
     }
-    console.error("Token verification error:", err);
-    throw createHttpError(401, "Invalid token.");
+    throw err;
   }
 
   const user = await UsersCollection.findOne({
