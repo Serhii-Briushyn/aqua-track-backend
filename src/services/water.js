@@ -179,26 +179,28 @@ export const getWeeklyWater = async (userId, startDate) => {
   for (let i = 0; i < 7; i++) {
     const currentDate = new Date(startOfWeek);
     currentDate.setUTCDate(startOfWeek.getUTCDate() + i);
-    groupedByDay[i] = { date: currentDate.toISOString(), amount: 0, norm: 0 };
+    groupedByDay[currentDate.toISOString().split("T")[0]] = {
+      date: currentDate.toISOString(),
+      amount: 0,
+      norm: 0,
+    };
   }
 
   weeklyData.forEach(({ date, amount, norm }) => {
-    const dayIndex = new Date(date).getUTCDay();
-    const adjustedDayIndex = dayIndex === 0 ? 6 : dayIndex - 1;
-    groupedByDay[adjustedDayIndex].amount += amount;
-    groupedByDay[adjustedDayIndex].norm =
-      norm || groupedByDay[adjustedDayIndex].norm;
+    const formattedDate = new Date(date).toISOString().split("T")[0];
+    if (groupedByDay[formattedDate]) {
+      groupedByDay[formattedDate].amount += amount;
+      groupedByDay[formattedDate].norm =
+        norm || groupedByDay[formattedDate].norm;
+    }
   });
 
-  const data = Object.entries(groupedByDay).map(
-    ([day, { date, amount, norm }]) => ({
-      day: parseInt(day, 10) + 1,
-      date,
-      amount,
-      norm,
-      percentage: norm ? parseFloat(((amount / norm) * 100).toFixed(2)) : 0,
-    }),
-  );
+  const data = Object.values(groupedByDay).map(({ date, amount, norm }) => ({
+    date, 
+    amount,
+    norm,
+    percentage: norm ? parseFloat(((amount / norm) * 100).toFixed(2)) : 0,
+  }));
 
   const totalAmount = data.reduce((sum, { amount }) => sum + amount, 0);
   const totalNorm = data.reduce((sum, { norm }) => sum + norm, 0);
