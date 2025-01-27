@@ -8,7 +8,9 @@ export const createWater = async (payload) => {
 
   const userDate = date ? new Date(date) : new Date();
 
-  const dateInUTC = new Date(userDate.getTime() - userDate.getTimezoneOffset() * 60000);
+  const dateInUTC = new Date(
+    userDate.getTime() - userDate.getTimezoneOffset() * 60000,
+  );
 
   const percentage = ((amount / norm) * 100).toFixed(2);
 
@@ -159,7 +161,6 @@ export const getWeeklyWater = async (userId, startDate) => {
   endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
   endOfWeek.setUTCHours(23, 59, 59, 999);
 
-  // data from all week
   const weeklyData = await WaterCollection.find({
     owner: new mongoose.Types.ObjectId(userId),
     date: { $gte: startOfWeek, $lte: endOfWeek },
@@ -174,32 +175,36 @@ export const getWeeklyWater = async (userId, startDate) => {
     };
   }
 
-  // group data
-  const groupedByDay = weeklyData.reduce((acc, { date, amount, norm }) => {
-    const day = new Date(date).getUTCDay();
-    if (!acc[day]) acc[day] = { amount: 0, norm: 0 };
-    acc[day].amount += amount;
-    acc[day].norm = norm || acc[day].norm; // norm update if we have
-    return acc;
-  }, {});
+  const groupedByDay = {};
+  for (let i = 0; i < 7; i++) {
+    const currentDate = new Date(startOfWeek);
+    currentDate.setUTCDate(startOfWeek.getUTCDate() + i);
+    groupedByDay[i] = { date: currentDate.toISOString(), amount: 0, norm: 0 };
+  }
 
-  // sum data per week
-  const totalAmount = weeklyData.reduce((sum, { amount }) => sum + amount, 0);
-  const totalNorm = Object.values(groupedByDay).reduce(
-    (sum, day) => sum + (day.norm || 0),
-    0,
+  weeklyData.forEach(({ date, amount, norm }) => {
+    const dayIndex = new Date(date).getUTCDay();
+    const adjustedDayIndex = dayIndex === 0 ? 6 : dayIndex - 1;
+    groupedByDay[adjustedDayIndex].amount += amount;
+    groupedByDay[adjustedDayIndex].norm =
+      norm || groupedByDay[adjustedDayIndex].norm;
+  });
+
+  const data = Object.entries(groupedByDay).map(
+    ([day, { date, amount, norm }]) => ({
+      day: parseInt(day, 10) + 1,
+      date,
+      amount,
+      norm,
+      percentage: norm ? parseFloat(((amount / norm) * 100).toFixed(2)) : 0,
+    }),
   );
 
+  const totalAmount = data.reduce((sum, { amount }) => sum + amount, 0);
+  const totalNorm = data.reduce((sum, { norm }) => sum + norm, 0);
   const totalPercentage = totalNorm
     ? parseFloat(((totalAmount / totalNorm) * 100).toFixed(2))
     : 0;
-
-  const data = Object.entries(groupedByDay).map(([day, { amount, norm }]) => ({
-    day: parseInt(day, 10),
-    amount,
-    norm,
-    percentage: norm ? parseFloat(((amount / norm) * 100).toFixed(2)) : 0,
-  }));
 
   return {
     data,
